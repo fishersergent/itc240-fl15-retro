@@ -1,27 +1,6 @@
-<?php
-//contact.php
-?>
+//START CODE TO ADD TO CONTACT PAGE!-----------------
 
-<?php include 'includes/config.php';?>
-<?php include 'includes/header.php';?>
-        	<!--header ends here-->
-<?php 
-if(isset($_POST['Submit']))
-{//if data, process it
-    /*
-        echo '<pre>';
-        var_dump($_POST);
-        echo '</pre>';
-     */
-    $to = 'efishe03@seattlecentral.edu';
-    $message = process_post();
-    $subject = 'Contact form from retro site';
-    
-    safeEmail($to, $subject, $message);
-    
-    
-    
-     //connect to the database in order to add contact data
+    //connect to the database in order to add contact data
     $iConn = @mysqli_connect(DB_HOST,DB_USER,DB_PASSWORD,DB_NAME) or die(myerror(__FILE__,__LINE__,mysqli_connect_error()));
 
     //process each post var, adding slashes, using mysqli_real_escape(), etc.
@@ -55,26 +34,33 @@ if(isset($_POST['Submit']))
     
     //close connection
     @mysqli_close($iConn);
-    
-    
-    
-    
-    
-    
-    
-    echo '<p>Thanks for the info!</p>';
-    
-}else{//no data, show form
-        echo'
-        <form method="post" action="">
-        Name: <input type="text" name="Name" required="required" /></br>
-        Email: <input type="email" name="Email" required="required" /></br>
-        Comments: <textarea name="Comments"></textarea> </br>
-        <input type="submit" value="Send" name="Submit" />
-        </from>
-        ';
-        }
-?>
-    
-            <!--footer starts here-->
-<?php include 'includes/footer.php';?>
+
+//END CODE TO ADD TO CONTACT PAGE!-----------------
+
+//START FUNCTION TO ADD TO common.php INCLUDE FILE!---------------------------------
+
+/**
+ * Filters data per MySQL standards before entering database. 
+ *
+ * Adds slashes and helps prevent SQL injection per MySQL standards.    
+ * Function enclosed in 'wrapper' function to add further functionality  
+ * as vulnerabilities emerge.
+ *
+ * @param string $var data as entered by user
+ * @param object $myConn active mysqli DB connection, passed by reference.
+ * @return string returns data filtered by MySQL, adding slashes, etc.
+ * @see dbIn() 
+ * @todo none
+ */
+function dbIn($var,&$iConn)
+{
+	if(isset($var) && $var != "")
+	{
+		return mysqli_real_escape_string($iConn,$var);
+	}else{
+		return "";
+	}
+	
+} #End dbIn()
+
+//END FUNCTION TO ADD TO common.php INCLUDE FILE!---------------------------------
